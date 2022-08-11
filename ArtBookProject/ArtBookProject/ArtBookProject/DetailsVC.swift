@@ -6,8 +6,9 @@
 //
 
 import UIKit
+import CoreData
 
-class DetailsVC: UIViewController {
+class DetailsVC: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
     
     @IBOutlet weak var imageView: UIImageView!
@@ -18,10 +19,43 @@ class DetailsVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        
+        
+        
+        
+        
+        
+        //Recognizers
+        
+        
         let gestureRecognizer = UITapGestureRecognizer (target: self, action: #selector(hideKeyboard))
         view.addGestureRecognizer(gestureRecognizer)
         
+        
+        imageView.isUserInteractionEnabled = true
+        let imagetTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(selectImage))
+        imageView.addGestureRecognizer(imagetTapRecognizer)
+        
+        
+        
+    }
+    
+    
+    @objc func selectImage(){
+        
+        let picker = UIImagePickerController ()
+        picker.delegate = self
+        picker.sourceType = .photoLibrary
+        picker.allowsEditing = true
+        present(picker, animated: true, completion: nil)
+        
+        
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        imageView.image = info [.originalImage] as? UIImage
+        self.dismiss(animated: true, completion: nil)
     }
     
     @objc func hideKeyboard(){
@@ -31,7 +65,40 @@ class DetailsVC: UIViewController {
 
     @IBAction func saveButtonClicked(_ sender: Any) {
         
-        print("test")
+        
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let context = appDelegate.persistentContainer.viewContext
+        
+        let newPainting = NSEntityDescription.insertNewObject(forEntityName: "Paintings", into: context)
+        
+        //Attributes
+        
+        newPainting.setValue(nameText.text!, forKey: "Name")
+        newPainting.setValue(artistText.text, forKey: "Artist")
+        
+        if let year = Int(yearText.text!){
+            
+            newPainting.setValue(year, forKey: "Year")
+            
+        }
+        
+        newPainting.setValue(UUID(), forKey: "id")
+        
+        let data = imageView.image!.jpegData(compressionQuality: 0.5)
+        
+        newPainting.setValue(data, forKey: "image")
+        
+        do {
+            try context.save()
+            print("Success")
+        } catch {
+            print("Error")
+        }
+        
+        
+        
+        
+        
     }
     
 

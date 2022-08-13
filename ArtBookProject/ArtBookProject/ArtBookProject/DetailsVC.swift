@@ -36,7 +36,7 @@ class DetailsVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
             
             let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Paintings")
             let idString = chosenPaintingId?.uuidString
-            fetchRequest.predicate = NSPredicate (format: "id %@", idString!)
+            fetchRequest.predicate = NSPredicate (format: "id = %@", idString!)
             fetchRequest.returnsObjectsAsFaults = false
             
             do  {

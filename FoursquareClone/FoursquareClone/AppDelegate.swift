@@ -1,17 +1,14 @@
 //
 //  AppDelegate.swift
-//  InstaCloneFirebase
+//  FoursquareClone
 //
-//  Created by Atil Samancioglu on 31.07.2019.
-//  Copyright © 2019 Atil Samancioglu. All rights reserved.
+//  Created by Ufuk on 9.09.2023.
 //
 
 import UIKit
-import Firebase
-import OneSignal
+import ParseSwift
 
-
-@UIApplicationMain
+@main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
@@ -19,11 +16,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
-        FirebaseApp.configure()
+        if let url = URL(string: "https://parseapi.back4app.com") {
+            let configuration = ParseConfiguration(applicationId: "cxCjG8h3aBFozvsiQyGzyuIMSqnbbCxQkM8iptcP", serverURL: url )
+            
+        }
+        
+ 
+        
         
         return true
     }
 
+    // MARK: UISceneSession Lifecycle
 
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
         // Called when a new scene session is being created.
@@ -39,26 +43,4 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
 }
-    
-func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions:
-[UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-  // Remove this method to stop OneSignal Debugging
-  OneSignal.setLogLevel(.LL_VERBOSE, visualLevel: .LL_NONE)
-  
-  // OneSignal initialization
-  OneSignal.initWithLaunchOptions(launchOptions)
-  OneSignal.setAppId("78f9e7c8-8abf-42c8-b9b1-0d63957d8487")
-  
-  // promptForPushNotifications will show the native iOS notification permission prompt.
-  // We recommend removing the following code and instead using an In-App Message to prompt for notification permission (See step 8)
-  OneSignal.promptForPushNotifications(userResponse: { accepted in
-    print("User accepted notifications: \(accepted)")
-  })
-  
-  // Set your customer userId
-  // OneSignal.setExternalUserId("userId")
-  
-  
 
-   return true
-}
